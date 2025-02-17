@@ -28,7 +28,7 @@
 #include "SrvManager.h"
 #include"ImGuiManager.h"
 #include <imgui.h>
-
+#include "Audio.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	D3DResourceLeakChecker leakCheck;
@@ -80,10 +80,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	object3dCommon = new Object3dCommon;
 	object3dCommon->Initialize(dxCommon);
 
+	// Audioの初期化
+	Audio* audio_ = nullptr;
+	audio_->GetInstance()->Initialize();
+
 	//3Dモデルマネージャの初期化
 	ModelManager::GetInstants()->Initialize(dxCommon, srvManager);
 #pragma endregion 
 
+	SoundData soundData1 = Audio::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 
 #pragma region Resource
 	const uint32_t kSubdivision = 512;
@@ -268,6 +273,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	bool useMonsterBall = false;
 
+	bool bgm = false;
+
 	while (true) {
 		camera->Update();
 		//Windowsのメッセージ処理
@@ -281,6 +288,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #endif // USE_IMGUI
 
 		input->Update();
+
+		if (!bgm) {
+			Audio::GetInstance()->SoundPlayWave(soundData1);
+			bgm = true;
+		}
+		if (input->TriggerKey(DIK_SPACE)) {
+			Audio::GetInstance()->SoundUnload(&soundData1);
+		}
 
 		////ゲームの処理
 		//if (input->PushKey(DIK_A)) {
@@ -392,6 +407,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #endif //_DEBUG
 #pragma endregion
 
+	//audio解放
+	Audio::GetInstance()->Finalize();
 	// 終了処理
 	winApp->Finalize();
 	// 解放処理
