@@ -27,6 +27,7 @@
 #include "TextureManager.h"
 #include "SrvManager.h"
 #include"ImGuiManager.h"
+#include <imgui.h>
 
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -48,10 +49,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(winApp);
 
-	//imguiMnagerの初期化
+#ifdef USE_IMGUI
+	//imguiManagerの初期化
 	ImGuiManager* imGuiManager = nullptr;
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(dxCommon, winApp);
+#endif // USE_IMGUI
 
 	//srvマネージャの宣言
 	SrvManager* srvManager = nullptr;
@@ -273,7 +276,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 
+#ifdef USE_IMGUI
 		imGuiManager->Begin();
+#endif // USE_IMGUI
 
 		input->Update();
 
@@ -315,18 +320,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		object3d2nd->SetRotate(Vector3{ 0,0 ,rotation });
 		object3d2nd->Update();
 
+#ifdef USE_IMGUI
+		// ModelTransform
+		if (ImGui::CollapsingHeader("Model"))
+		{
+			transformModel = object3d->GetTransform();
+			ImGui::DragFloat3("*ModelScale", &transformModel.scale.x, 0.01f);
+			ImGui::DragFloat3("*ModelRotate", &transformModel.rotate.x, 0.01f);
+			ImGui::DragFloat3("*ModelTranslate", &transformModel.translate.x, 0.01f);
+			object3d->SetTransform(transformModel);
+		}
+		ImGui::Separator();
+#endif // USE_IMGUI
 
-		/*#pragma region material用Matrix
-				Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
-				uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransformSprite.rotate.z));
-				uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
-				materialDataSprite->uvTransform = uvTransformMatrix;
-		#pragma endregion*/
-
-
-		
-
+#ifdef USE_IMGUI
 		imGuiManager->End();
+#endif // USE_IMGUI
 
 		//DirectXの描画準備
 		dxCommon->Begin();
@@ -366,14 +375,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon->GetCommandList());
 
+#ifdef USE_IMGUI
 		imGuiManager->Draw();
+#endif // USE_IMGUI
 
 		dxCommon->End();
 	}
 
 #pragma region 解放処理
 
+#ifdef USE_IMGUI
 	imGuiManager->Finalize();
+#endif // USE_IMGUI
 
 #ifdef _DEBUG
 #endif //_DEBUG
@@ -386,7 +399,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ModelManager::GetInstants()->Finalize();
 	delete winApp;
 	delete dxCommon;
+#ifdef USE_IMGUI
 	delete imGuiManager;
+#endif // USE_IMGUI
 	delete input;
 	delete srvManager;
 	delete spriteCommon;
