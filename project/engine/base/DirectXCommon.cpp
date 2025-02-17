@@ -238,22 +238,6 @@ void DirectXCommon::DxcCompilerInitialize()
 }
 
 
-void DirectXCommon::ImguiInitialize()
-{
-	//ImGui初期化
-	/*IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(winApp_->GetHwnd());
-	ImGui_ImplDX12_Init(device.Get(),
-		swapChainDesc.BufferCount,
-		rtvDesc.Format,
-		srvDescriptorHeap.Get(),
-		srvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(),
-		srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());*/
-}
-
-
 void DirectXCommon::Initialize(WinApp* winApp)
 {
 	assert(winApp);
@@ -271,7 +255,6 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	ViewportInitialize();
 	ScissorInitialize();
 	DxcCompilerInitialize();
-	ImguiInitialize();
 }
 
 

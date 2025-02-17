@@ -26,6 +26,7 @@
 #include "ModelManager.h"
 #include "TextureManager.h"
 #include "SrvManager.h"
+#include"ImGuiManager.h"
 
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -46,6 +47,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	DirectXCommon* dxCommon = nullptr;
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(winApp);
+
+	//imguiMnagerの初期化
+	ImGuiManager* imGuiMnager = nullptr;
+	imGuiMnager = new ImGuiManager();
+	imGuiMnager->Initialize(dxCommon, winApp);
 
 	//srvマネージャの宣言
 	SrvManager* srvManager = nullptr;
@@ -267,6 +273,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 
+		imGuiMnager->Begin();
+
 		input->Update();
 
 		////ゲームの処理
@@ -316,93 +324,65 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		#pragma endregion*/
 
 
-		/*ImGui_ImplDX12_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-		ImGui::Begin("Settings");*/
+		////CameraTransform
+			//if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
+			//{/*
+			//	ImGui::DragFloat3("CameraTranslate", &cameraTransform.translate.x, 0.01f);
+			//	ImGui::DragFloat3("CameraRotate", &cameraTransform.rotate.x, 0.01f);*/
+			//}
+			//ImGui::Checkbox("useMonsterBall", &useMonsterBall);
+			//// SphereSetColor
+			//if (ImGui::CollapsingHeader("SetcolorSphere", ImGuiTreeNodeFlags_DefaultOpen))
+			//{
+			//	ImGui::ColorEdit4("*SetColor", &materialDataSphere->color.x);
+			//}
+			//// SphereTransform
+			//if (ImGui::CollapsingHeader("Sphere", ImGuiTreeNodeFlags_DefaultOpen))
+			//{
+			//	ImGui::DragFloat3("*Scale", &transform.scale.x, 0.01f);
+			//	ImGui::DragFloat3("*Rotate", &transform.rotate.x, 0.01f);
+			//	ImGui::DragFloat3("*Transrate", &transform.translate.x, 0.01f);
+			//}
+			//// ModelTransform
+			//if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
+			//{
+			//	transformModel = object3D->GetTransform();
+			//	ImGui::DragFloat3("*ModelScale", &transformModel.scale.x, 0.01f);
+			//	ImGui::DragFloat3("*ModelRotate", &transformModel.rotate.x, 0.01f);
+			//	ImGui::DragFloat3("*ModelTransrate", &transformModel.translate.x, 0.01f);
+			//	object3D->SetTransform(transformModel);
+			//}
+			////if (ImGui::CollapsingHeader("Sprite", ImGuiTreeNodeFlags_DefaultOpen))
+			////{
+			////	//SpriteTransform
+			////	Vector2 size = sprite->GetSize();
+			////	Vector2 position = sprite->GetPosition();
+			////	float rotation = sprite->GetRotation();
+			////	Vector4 spritecolor = sprite->GetColor();
+			////	ImGui::ColorEdit4("*spriteColor", &spritecolor.x);
+			////	ImGui::DragFloat2("*ScaleSprite", &size.x, 0.1f);
+			////	ImGui::DragFloat("*RotateSprite", &rotation, 0.1f);
+			////	ImGui::DragFloat2("*TransrateSprite", &position.x);
+			////	sprite->setColor(spritecolor);
+			////	sprite->SetPosition(position);
+			////	sprite->SetRotation(rotation);
+			////	sprite->SetSize(size);
+			////}
+			////uvTransformSprite
+			//if (ImGui::CollapsingHeader("uvTransformSprite", ImGuiTreeNodeFlags_DefaultOpen))
+			//{
+			//	/*ImGui::DragFloat2("*UVTranslate", &uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+			//	ImGui::DragFloat2("*UVScale", &uvTransformSprite.scale.x, 0.01f, -1.0f, 1.0f);
+			//	ImGui::SliderAngle("*UVRotate", &uvTransformSprite.rotate.z);*/
+			//}
+			////項目4
+			//if (ImGui::CollapsingHeader("directionalLight", ImGuiTreeNodeFlags_DefaultOpen))
+			//{
+			//	/*ImGui::ColorEdit4("*LightSetColor", &directionalLightData->color.x);
+			//	ImGui::DragFloat3("*Lightdirection", &directionalLightData->direction.x, 0.01f, -1.0f, 1.0f);*/
+			//}
 
-		// Color Edit ウィンドウ
-		/*if (ImGui::CollapsingHeader("SetColor")) {
-			ImGui::ColorEdit4("materialData", &materialDataSphere->color.x);
-		}
-		ImGui::Separator();*/
-
-		// Texture変更
-		/*if (ImGui::CollapsingHeader("Texture change")) {
-			ImGui::Checkbox("useMonsterBall", &useMonsterBall);
-		}
-		ImGui::Separator();*/
-
-		// Lighting
-		/*if (ImGui::CollapsingHeader("Lighting")) {
-			ImGui::ColorEdit4("LightSetColor", &directionalLightData->color.x);
-			ImGui::DragFloat3("directionalLight", &directionalLightData->direction.x, 0.01f, -1.0f, 1.0f);
-		}
-		ImGui::Separator();*/
-
-		// スフィアウィンドウ
-		/*if (ImGui::CollapsingHeader("3DObject")) {
-			ImGui::DragFloat3("Translation", &transform.translate.x, 0.01f);
-			ImGui::DragFloat3("Rotation", &transform.rotate.x, 0.01f);
-			ImGui::DragFloat2("Scale", &transform.scale.x, 0.01f);
-			if (ImGui::Button("Reset Transform")) {
-				transform = { {1.0f, 1.0f, 1.0f}, {0.0f, -1.5f, 0.0f}, {0.0f, 0.0f, 0.0f} };
-			}
-		}
-		ImGui::Separator();*/
-
-		// モデルウィンドウ
-		/*if (ImGui::CollapsingHeader("Model")) {
-			transformModel = object3d->GetTransform();
-
-			ImGui::DragFloat3("ModelScale", &transformModel.scale.x, 0.01f);
-			ImGui::DragFloat3("ModelRotate", &transformModel.rotate.x, 0.01f);
-			ImGui::DragFloat3("ModelTranslate", &transformModel.translate.x, 0.01f);
-
-			object3d->SetTransform(transformModel);
-			ImGui::DragFloat3("ModelTranslate", &transformModel.translate.x, 0.01f);
-			ImGui::DragFloat3("ModelRotate", &transformModel.rotate.x, 0.01f);
-			ImGui::DragFloat3("ModelScale", &transformModel.scale.x, 0.01f);
-			if (ImGui::Button("Reset Transform")) {
-			transformModel = { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
-			}
-		}
-		ImGui::Separator();*/
-
-		// スプライトウィンドウ
-		/*if (ImGui::CollapsingHeader("2DSprite")) {
-			Vector2 size = sprite->GetSize();
-			Vector2 position = sprite->GetPosition();
-			float rotation = sprite->GetRotation();
-			Vector4 spritecolor = sprite->GetColor();
-			
-			ImGui::ColorEdit4("*spriteColor", &spritecolor.x);
-			ImGui::DragFloat2("*ScaleSprite", &size.x, 0.1f);
-			ImGui::DragFloat("*RotateSprite", &rotation, 0.1f);
-			ImGui::DragFloat2("*TranslateSprite", &position.x);
-			
-			sprite->setColor(spritecolor);
-			sprite->SetPosition(position);
-			sprite->SetRotation(rotation);
-			sprite->SetSize(size);
-			
-			if (ImGui::Button("Reset Transform")) {
-				transformSprite = { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
-			}
-		}
-		ImGui::Separator();*/
-
-		// UVTransform
-		/*if (ImGui::CollapsingHeader("UVTransform")) {
-			ImGui::DragFloat2("UVTranslate", &uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
-			ImGui::DragFloat2("UVScale", &uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
-			ImGui::SliderAngle("UVRotate", &uvTransformSprite.rotate.z);
-		}
-		ImGui::Separator();*/
-
-
-		/*ImGui::End();
-		ImGui::Render();*/
+		imGuiMnager->End();
 
 		//DirectXの描画準備
 		dxCommon->Begin();
@@ -442,16 +422,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon->GetCommandList());
 
+		imGuiMnager->Draw();
+
 		dxCommon->End();
 	}
 
 #pragma region 解放処理
 
-	/*ImGui_ImplDX12_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();*/
-
-	/*CloseHandle(fenceEvent);*/
+	imGuiMnager->Finalize();
 
 #ifdef _DEBUG
 #endif //_DEBUG
@@ -464,6 +442,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ModelManager::GetInstants()->Finalize();
 	delete winApp;
 	delete dxCommon;
+	delete imGuiMnager;
 	delete input;
 	delete srvManager;
 	delete spriteCommon;

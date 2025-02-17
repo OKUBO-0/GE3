@@ -40,11 +40,11 @@
     <Filter Include="ソース ファイル\input">
       <UniqueIdentifier>{2e76d947-1baf-4ee9-b50c-6f658ad272a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\base\base">
-      <UniqueIdentifier>{c7307b98-f3fe-4508-9043-0ea007e3db2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\2d">
       <UniqueIdentifier>{a6219a64-19b0-4a3c-930f-dde0ce763dd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base">
+      <UniqueIdentifier>{c7307b98-f3fe-4508-9043-0ea007e3db2e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,28 +94,28 @@
       <Filter>ソース ファイル\math</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\DirectXCommon.cpp">
-      <Filter>ヘッダー ファイル\base\base</Filter>
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\StringUtility.cpp">
-      <Filter>ヘッダー ファイル\base\base</Filter>
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\TextureManager.cpp">
-      <Filter>ヘッダー ファイル\base\base</Filter>
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\WinApp.cpp">
-      <Filter>ヘッダー ファイル\base\base</Filter>
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\input\Input.cpp">
       <Filter>ソース ファイル\input</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp">
-      <Filter>ヘッダー ファイル\base\base</Filter>
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\Logger.cpp">
-      <Filter>ヘッダー ファイル\base\base</Filter>
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\ModelManager.cpp">
-      <Filter>ヘッダー ファイル\base\base</Filter>
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル</Filter>
